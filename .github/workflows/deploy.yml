@@ -3,8 +3,6 @@ name: Deploy Next.js to GitHub Pages
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -40,6 +38,13 @@ jobs:
         
       - name: Build Next.js app
         run: npm run build
+        
+      - name: List build output
+        run: |
+          echo "Contents of out directory:"
+          ls -la out/
+          echo "First few files:"
+          find out/ -type f | head -10
         
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
