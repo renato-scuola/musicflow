@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  devIndicators: false
+  output: 'export',
+  trailingSlash: true,
+  images: {
+    unoptimized: true
+  },
+  devIndicators: false,
+  basePath: '/musicflow',
+  assetPrefix: '/musicflow'
   /* config options here */
 };
 
