@@ -53,4 +53,8 @@ A modern music streaming service with liquid glass design inspired by macOS, bui
 5. **Open in browser**
    Go to [http://localhost:3000](http://localhost:3000)
 
-Or, if you prefer you can access it online at: https://musicflow.it
+## 🚀 Live Demo
+
+You can access the live demo at: **https://renato-scuola.github.io/musicflow/**
+
+The app is automatically deployed to GitHub Pages via GitHub Actions on every push to the main branch.
