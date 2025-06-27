@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Outfit, Manrope } from "next/font/google";
 import "./globals.css";
 import { PlayerProvider } from "@/contexts/PlayerContext";
+import { PlaylistProvider } from "@/contexts/PlaylistContext";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -16,7 +17,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "MusicStream - Your music everywhere you are",
+  title: "MusicFlow",
   description: "Modern music streaming service with YouTube API and liquid glass design",
 };
 
@@ -31,7 +32,9 @@ export default function RootLayout({
         className={`${outfit.variable} ${manrope.variable} antialiased font-outfit`}
       >
         <PlayerProvider>
-          {children}
+          <PlaylistProvider>
+            {children}
+          </PlaylistProvider>
         </PlayerProvider>
       </body>
     </html>

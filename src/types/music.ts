@@ -41,3 +41,18 @@ export interface PlayerState {
   playlist: Track[];
   currentIndex: number;
 }
+
+export interface Playlist {
+  id: string;
+  name: string;
+  description?: string;
+  tracks: Track[];
+  createdAt: Date;
+  updatedAt: Date;
+  thumbnail?: string; // Use first track's thumbnail or custom
+}
+
+export interface PlaylistState {
+  playlists: Playlist[];
+  currentPlaylist: Playlist | null;
+}

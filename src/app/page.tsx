@@ -4,7 +4,8 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SearchBar } from '@/components/SearchBar';
 import { MusicPlayer } from '@/components/MusicPlayer';
-import { Music } from 'lucide-react';
+import { PlaylistManager } from '@/components/PlaylistManager';
+import { Music, List, Search as SearchIcon } from 'lucide-react';
 import { usePlayer } from '@/contexts/PlayerContext';
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
   const { currentTrack } = state;
   const [isSearching, setIsSearching] = useState(false);
   const [hasSearchedOnce, setHasSearchedOnce] = useState(false);
+  const [currentView, setCurrentView] = useState<'search' | 'playlists'>('search');
 
   const handleSearchStateChange = useCallback((searching: boolean) => {
     setIsSearching(searching);
@@ -79,32 +81,54 @@ export default function Home() {
       
       {/* Content */}
       <div className="relative z-10 min-h-screen">
-        {/* Search Bar - Always present, changes position with CSS transitions */}
-        <motion.div 
-          className={`
-            z-50 transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]
-            ${shouldShowCompactSearch 
-              ? 'fixed top-8 left-8 right-8' 
-              : 'absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-8'
-            }
-          `}
-          style={{
-            width: shouldShowCompactSearch ? 'auto' : '100%',
-            maxWidth: shouldShowCompactSearch ? 'none' : '40rem',
-            paddingLeft: shouldShowCompactSearch ? '0' : '2rem',
-            paddingRight: shouldShowCompactSearch ? '0' : '2rem',
-            transformOrigin: 'center center'
-          }}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ 
-            duration: 0.8, 
-            delay: 1.0,
-            ease: [0.25, 0.46, 0.45, 0.94]
-          }}
-        >
-          <SearchBar onSearchStateChange={handleSearchStateChange} isCompact={shouldShowCompactSearch} />
-        </motion.div>
+        {/* Search Bar - Show only in search view */}
+        <AnimatePresence>
+          {currentView === 'search' && (
+            <motion.div 
+              className={`
+                z-50 transition-all duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]
+                ${shouldShowCompactSearch 
+                  ? 'fixed top-8 left-8 right-8' 
+                  : 'absolute top-1/2 left-1/2 -translate-x-1/2 translate-y-8'
+                }
+              `}
+              style={{
+                width: shouldShowCompactSearch ? 'auto' : '100%',
+                maxWidth: shouldShowCompactSearch ? 'none' : '40rem',
+                paddingLeft: shouldShowCompactSearch ? '0' : '2rem',
+                paddingRight: shouldShowCompactSearch ? '0' : '2rem',
+                transformOrigin: 'center center'
+              }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -30 }}
+              transition={{ 
+                duration: 0.8, 
+                delay: shouldShowCompactSearch ? 0 : 1.0,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }}
+            >
+              <SearchBar onSearchStateChange={handleSearchStateChange} isCompact={shouldShowCompactSearch} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Playlist Manager - Show in playlist view */}
+        <AnimatePresence>
+          {currentView === 'playlists' && shouldShowCompactSearch && (
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -30 }}
+              className="fixed top-8 left-8 right-8 bottom-8 overflow-y-auto"
+              transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
+              <div className="max-w-6xl mx-auto">
+                <PlaylistManager isCompact={true} />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Main Content - Title that disappears when searching */}
         <AnimatePresence>
@@ -166,6 +190,72 @@ export default function Home() {
                     </motion.span>
                   </motion.h1>
                 </motion.div>
+
+                {/* Navigation Tabs */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ 
+                    duration: 0.8, 
+                    delay: 1.2,
+                    ease: [0.25, 0.46, 0.45, 0.94]
+                  }}
+                  className="mt-12 mb-8"
+                >
+                  <div className="flex space-x-2 p-1 rounded-xl bg-white/5 backdrop-blur-xl border border-white/10">
+                    <button
+                      onClick={() => setCurrentView('search')}
+                      className={`flex items-center space-x-2 px-6 py-3 rounded-lg transition-all duration-300 ${
+                        currentView === 'search'
+                          ? 'bg-white/15 text-white'
+                          : 'text-white/60 hover:text-white hover:bg-white/5'
+                      }`}
+                    >
+                      <SearchIcon className="w-5 h-5" />
+                      <span className="font-manrope font-medium">Search Music</span>
+                    </button>
+                    <button
+                      onClick={() => setCurrentView('playlists')}
+                      className={`flex items-center space-x-2 px-6 py-3 rounded-lg transition-all duration-300 ${
+                        currentView === 'playlists'
+                          ? 'bg-white/15 text-white'
+                          : 'text-white/60 hover:text-white hover:bg-white/5'
+                      }`}
+                    >
+                      <List className="w-5 h-5" />
+                      <span className="font-manrope font-medium">My Playlists</span>
+                    </button>
+                  </div>
+                </motion.div>
+
+                {/* Content based on current view */}
+                <AnimatePresence mode="wait">
+                  {currentView === 'search' && (
+                    <motion.div
+                      key="search"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.4 }}
+                      className="w-full max-w-2xl"
+                    >
+                      <SearchBar onSearchStateChange={handleSearchStateChange} isCompact={false} />
+                    </motion.div>
+                  )}
+                  
+                  {currentView === 'playlists' && (
+                    <motion.div
+                      key="playlists"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.4 }}
+                      className="w-full max-w-6xl"
+                    >
+                      <PlaylistManager isCompact={false} />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </motion.div>
           )}
