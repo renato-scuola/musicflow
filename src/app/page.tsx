@@ -162,7 +162,7 @@ export default function Home() {
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.6, delay: 0.8 }}
                     >
-                      Stream
+                      Flow
                     </motion.span>
                   </motion.h1>
                 </motion.div>

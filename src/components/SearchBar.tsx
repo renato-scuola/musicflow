@@ -285,7 +285,7 @@ export function SearchBar({ className, onSearchStateChange, isCompact = false }:
               <div className="flex flex-col items-center justify-center py-12 space-y-4">
                 <Loader2 className="w-8 h-8 text-white/80 animate-spin" />
                 <span className="text-white/70 font-manrope font-medium text-lg">Searching music...</span>
-                <p className="text-white/50 font-outfit text-sm px-4 text-center">Powered by Invidious - Free and unlimited</p>
+                <p className="text-white/50 font-outfit text-sm px-4 text-center">Powered by Invidious</p>
               </div>
             ) : results.length > 0 ? (
               <>
