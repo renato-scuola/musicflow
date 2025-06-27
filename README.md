@@ -1,124 +1,124 @@
-# 🎵 MusicStream
+# 🎵 MusicFlow
 
-Un servizio di streaming musicale moderno con design liquid glass ispirato a macOS, costruito con Next.js e integrazione YouTube API.
+A modern music streaming service with liquid glass design inspired by macOS, built with Next.js and YouTube API integration.
 
-## ✨ Caratteristiche
+## ✨ Features
 
-- **🔍 Ricerca Musicale**: Cerca e scopri milioni di brani tramite YouTube API
-- **🎯 Player Integrato**: Player musicale completo con controlli avanzati
-- **💎 Design Liquid Glass**: Interfaccia moderna con effetti glassmorphism
-- **📱 Responsive**: Ottimizzato per desktop e mobile
-- **🎨 Animazioni Fluide**: Transizioni smooth con Framer Motion
-- **🎧 Controlli Avanzati**: Play/pause, shuffle, repeat, controllo volume
+- **🔍 Music Search**: Search and discover millions of tracks via YouTube API
+- **🎯 Integrated Player**: Complete music player with advanced controls
+- **💎 Liquid Glass Design**: Modern interface with glassmorphism effects
+- **📱 Responsive**: Optimized for desktop and mobile
+- **🎨 Smooth Animations**: Fluid transitions with Framer Motion
+- **🎧 Advanced Controls**: Play/pause, shuffle, repeat, volume control
 
-## 🛠️ Tecnologie
+## 🛠️ Technologies
 
-- **Next.js 15** - Framework React con App Router
-- **TypeScript** - Type safety e migliore DX
-- **Tailwind CSS** - Styling utility-first
-- **YouTube Data API v3** - Ricerca e streaming musicale
-- **Framer Motion** - Animazioni fluide
-- **React YouTube** - Integrazione player YouTube
-- **Lucide React** - Icone moderne
+- **Next.js 15** - React framework with App Router
+- **TypeScript** - Type safety and better DX
+- **Tailwind CSS** - Utility-first styling
+- **YouTube Data API v3** - Music search and streaming
+- **Framer Motion** - Smooth animations
+- **React YouTube** - YouTube player integration
+- **Lucide React** - Modern icons
 
 ## 🚀 Setup
 
-### Prerequisiti
+### Prerequisites
 
 - Node.js 18+ 
 - YouTube Data API Key
 
-### Installazione
+### Installation
 
-1. **Clona il repository**
+1. **Clone the repository**
    ```bash
-   git clone [repository-url]
-   cd musicnigga
+   git clone https://github.com/renato-scuola/musicflow.git
+   cd musicflow
    ```
 
-2. **Installa le dipendenze**
+2. **Install dependencies**
    ```bash
    npm install
    ```
 
-3. **Configura le variabili d'ambiente**
+3. **Configure environment variables**
    ```bash
    cp .env.local.example .env.local
    ```
    
-   Aggiungi la tua YouTube API Key in `.env.local`:
+   Add your YouTube API Key to `.env.local`:
    ```env
    NEXT_PUBLIC_YOUTUBE_API_KEY=your_youtube_api_key_here
    ```
 
-4. **Avvia il server di sviluppo**
+4. **Start the development server**
    ```bash
    npm run dev
    ```
 
-5. **Apri nel browser**
-   Vai su [http://localhost:3000](http://localhost:3000)
+5. **Open in browser**
+   Go to [http://localhost:3000](http://localhost:3000)
 
-## 🔧 Configurazione YouTube API
+## 🔧 YouTube API Configuration
 
-1. Vai su [Google Cloud Console](https://console.cloud.google.com/)
-2. Crea un nuovo progetto o seleziona uno esistente
-3. Abilita la YouTube Data API v3
-4. Crea le credenziali (API Key)
-5. Aggiungi la tua API key al file `.env.local`
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select an existing one
+3. Enable the YouTube Data API v3
+4. Create credentials (API Key)
+5. Add your API key to the `.env.local` file
 
-## 📁 Struttura del Progetto
+## 📁 Project Structure
 
 ```
 src/
 ├── app/                    # Next.js App Router
-│   ├── layout.tsx         # Layout principale
+│   ├── layout.tsx         # Main layout
 │   ├── page.tsx           # Homepage
-│   └── globals.css        # Stili globali
-├── components/            # Componenti React
-│   ├── SearchBar.tsx      # Barra di ricerca
-│   └── MusicPlayer.tsx    # Player musicale
+│   └── globals.css        # Global styles
+├── components/            # React components
+│   ├── SearchBar.tsx      # Search bar
+│   └── MusicPlayer.tsx    # Music player
 ├── contexts/              # React Contexts
-│   └── PlayerContext.tsx  # Gestione stato player
+│   └── PlayerContext.tsx  # Player state management
 ├── services/              # API Services
 │   └── youtube.ts         # YouTube API integration
 ├── types/                 # TypeScript types
-│   └── music.ts           # Tipi per musica
-└── lib/                   # Utilità
+│   └── music.ts           # Music types
+└── lib/                   # Utilities
     └── utils.ts           # Helper functions
 ```
 
-## 🎯 Funzionalità Principali
+## 🎯 Key Features
 
-### 🔍 Ricerca Musicale
-- Ricerca in tempo reale tramite YouTube API
-- Risultati ottimizzati per contenuti musicali
-- Anteprima con thumbnail e informazioni artista
+### 🔍 Music Search
+- Real-time search via YouTube API
+- Results optimized for musical content
+- Preview with thumbnails and artist information
 
-### 🎵 Player Musicale
-- Riproduzione tramite YouTube embedded player
-- Controlli completi: play/pause, avanti/indietro
-- Barra di progresso interattiva
-- Controllo volume con slider
-- Modalità shuffle e repeat
+### 🎵 Music Player
+- Playback via YouTube embedded player
+- Complete controls: play/pause, forward/backward
+- Interactive progress bar
+- Volume control with slider
+- Shuffle and repeat modes
 
 ### 💎 Design System
-- **Liquid Glass**: Effetti glassmorphism con backdrop-blur
-- **Responsive**: Layout adattivo per tutti i dispositivi
-- **Animazioni**: Transizioni fluide con Framer Motion
-- **Accessibilità**: Focus states e keyboard navigation
+- **Liquid Glass**: Glassmorphism effects with backdrop-blur
+- **Responsive**: Adaptive layout for all devices
+- **Animations**: Smooth transitions with Framer Motion
+- **Accessibility**: Focus states and keyboard navigation
 
 ## 📱 Responsive Design
 
-L'interfaccia si adatta automaticamente a:
-- **Desktop**: Layout completo con sidebar e controlli estesi
-- **Tablet**: Layout ottimizzato per touch interaction
-- **Mobile**: Player compatto con espansione full-screen
+The interface automatically adapts to:
+- **Desktop**: Complete layout with sidebar and extended controls
+- **Tablet**: Layout optimized for touch interaction
+- **Mobile**: Compact player with full-screen expansion
 
-## 🎨 Personalizzazione
+## 🎨 Customization
 
-### Colori e Temi
-I colori possono essere personalizzati in `globals.css`:
+### Colors and Themes
+Colors can be customized in `globals.css`:
 ```css
 :root {
   --gradient-primary: from-purple-900 via-blue-900 to-indigo-900;
@@ -127,18 +127,18 @@ I colori possono essere personalizzati in `globals.css`:
 }
 ```
 
-### Animazioni
-Le animazioni sono configurabili tramite Framer Motion variants nei componenti.
+### Animations
+Animations are configurable via Framer Motion variants in components.
 
 ## 🚀 Deploy
 
-### Vercel (Raccomandato)
+### Vercel (Recommended)
 ```bash
 npm run build
-# Deploy automatico tramite Vercel GitHub integration
+# Automatic deployment via Vercel GitHub integration
 ```
 
-### Altri provider
+### Other providers
 ```bash
 npm run build
 npm run start
@@ -158,19 +158,19 @@ const { playTrack, togglePlayPause, nextTrack } = usePlayer();
 
 ## 🤝 Contributing
 
-1. Fork il progetto
-2. Crea un feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit le modifiche (`git commit -m 'Add some AmazingFeature'`)
-4. Push al branch (`git push origin feature/AmazingFeature`)
-5. Apri una Pull Request
+1. Fork the project
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## 📄 Licenza
+## 📄 License
 
-Distribuito sotto licenza MIT. Vedi `LICENSE` per maggiori informazioni.
+Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 🙏 Acknowledgments
 
-- Design ispirato a macOS e iOS
-- YouTube API per il contenuto musicale
-- Framer Motion per le animazioni
-- Tailwind CSS per il sistema di design
+- Design inspired by macOS and iOS
+- YouTube API for musical content
+- Framer Motion for animations
+- Tailwind CSS for design system
