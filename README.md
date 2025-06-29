@@ -9,14 +9,12 @@ A modern music streaming service with liquid glass design inspired by macOS, bui
 - **💎 Liquid Glass Design**: Modern interface with glassmorphism effects
 - **📱 Responsive**: Optimized for desktop and mobile
 - **🎨 Smooth Animations**: Fluid transitions with Framer Motion
-- **🎧 Advanced Controls**: Play/pause, shuffle, repeat, volume control
 
 ## 🛠️ Technologies
 
 - **Next.js 15** - React framework with App Router
 - **TypeScript** - Type safety and better DX
 - **Tailwind CSS** - Utility-first styling
-- **YouTube Data API v3** - Music search and streaming
 - **Framer Motion** - Smooth animations
 - **React YouTube** - YouTube player integration
 - **Lucide React** - Modern icons
@@ -25,14 +23,13 @@ A modern music streaming service with liquid glass design inspired by macOS, bui
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 15+
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
    git clone https://github.com/renato-scuola/musicflow.git
-   cd musicflow
    ```
 
 2. **Install dependencies**
@@ -53,4 +50,6 @@ A modern music streaming service with liquid glass design inspired by macOS, bui
 5. **Open in browser**
    Go to [http://localhost:3000](http://localhost:3000)
 
-Or, if you prefer you can access it online at: https://musicflow.it
+## 🚀 Live Demo
+
+You can access the live demo at: **https://musicflow.it**
