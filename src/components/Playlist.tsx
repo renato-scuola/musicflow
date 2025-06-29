@@ -31,7 +31,7 @@ export function Playlist() {
     artist: track.artist,
     duration: track.duration,
     thumbnail: track.thumbnail,
-    videoId: track.id, // Usiamo l'id come videoId temporaneamente
+    videoId: track.id, // Use the id as videoId temporarily
     channelTitle: track.artist,
     url: track.url
   });
@@ -197,7 +197,7 @@ export function Playlist() {
               Le tue Playlist
             </h1>
             <p className="text-white/60 font-outfit">
-              Gestisci la tua collezione musicale personale
+              Manage your personal music collection
             </p>
           </div>
           <button
@@ -224,7 +224,7 @@ export function Playlist() {
               No playlists yet
             </h3>
             <p className="text-white/70 font-outfit mb-6">
-              Crea la tua prima playlist per iniziare a organizzare la tua musica
+              Create your first playlist to start organizing your music
             </p>
             <button
               onClick={() => setShowCreateModal(true)}

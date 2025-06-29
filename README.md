@@ -1,4 +1,11 @@
-# 🎵 MusicFlow
+# 🎵## ✨ Features
+
+- **🔍 Music Search**: Search and discover millions of tracks via YouTube
+- **🎯 Integrated Player**: Complete music player with advanced controls
+- **📝 Playlist Management**: Create, edit, and manage custom playlists
+- **💎 Liquid Glass Design**: Modern interface with glassmorphism effects
+- **📱 Responsive**: Optimized for desktop and mobile
+- **🎨 Smooth Animations**: Fluid transitions with Framer Motionow
 
 A modern music streaming service with liquid glass design inspired by macOS, built with Next.js, Invidious API and YouTube integration.
 

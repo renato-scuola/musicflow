@@ -121,7 +121,7 @@ class InvidiousAPIService {
       }
     }
 
-    throw new Error('Tutte le istanze Invidious hanno fallito. Riprova più tardi o verifica la connessione internet.');
+    throw new Error('All Invidious instances failed. Please try again later or check your internet connection.');
   }
 
   private cleanTitle(title: string): string {
@@ -132,7 +132,7 @@ class InvidiousAPIService {
       /\s*\(.*?\)/g,           // Parentesi
       /\s*\[.*?\]/g,           // Quadre
       /\s*-\s*Official.*$/i,   // "Official" suffixes
-      /\s*\|\s*.*$/g,          // Tutto dopo |
+      /\s*\|\s*.*$/g,          // Everything after |
       /\s*-\s*YouTube$/i,      // "YouTube" suffix
       /\s*-\s*Audio$/i,        // "Audio" suffix
       /\s*-\s*Video$/i,        // "Video" suffix

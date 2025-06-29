@@ -121,7 +121,7 @@ export default function Home() {
                   whileTap={{ scale: 0.98 }}
                 >
                   <Search className="w-4 h-4" />
-                  <span>Cerca</span>
+                  <span>Search</span>
                 </motion.button>
                 <motion.button
                   onClick={() => handleModeChange('playlist')}
