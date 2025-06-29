@@ -1,64 +1,94 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Playlist, Track } from '@/types/music';
+
+export interface Track {
+  id: string;
+  title: string;
+  artist: string;
+  duration: string;
+  thumbnail: string;
+  url?: string;
+}
+
+export interface Playlist {
+  id: string;
+  name: string;
+  description: string;
+  tracks: Track[];
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 interface PlaylistContextType {
   playlists: Playlist[];
-  currentPlaylist: Playlist | null;
   createPlaylist: (name: string, description?: string) => Playlist;
-  deletePlaylist: (playlistId: string) => void;
   addTrackToPlaylist: (playlistId: string, track: Track) => void;
   removeTrackFromPlaylist: (playlistId: string, trackId: string) => void;
-  updatePlaylist: (playlistId: string, updates: Partial<Playlist>) => void;
-  setCurrentPlaylist: (playlist: Playlist | null) => void;
-  getPlaylistById: (playlistId: string) => Playlist | undefined;
-  duplicatePlaylist: (playlistId: string, newName?: string) => Playlist | null;
+  deletePlaylist: (playlistId: string) => void;
+  updatePlaylist: (playlistId: string, updates: Partial<Omit<Playlist, 'id' | 'createdAt'>>) => void;
+  reorderTrack: (playlistId: string, fromIndex: number, toIndex: number) => void;
 }
 
 const PlaylistContext = createContext<PlaylistContextType | undefined>(undefined);
 
-export function usePlaylist() {
-  const context = useContext(PlaylistContext);
-  if (!context) {
-    throw new Error('usePlaylist must be used within a PlaylistProvider');
-  }
-  return context;
-}
+const STORAGE_KEY = 'musicflow_playlists';
 
-interface PlaylistProviderProps {
-  children: ReactNode;
-}
-
-export function PlaylistProvider({ children }: PlaylistProviderProps) {
+export function PlaylistProvider({ children }: { children: ReactNode }) {
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
-  const [currentPlaylist, setCurrentPlaylist] = useState<Playlist | null>(null);
 
   // Load playlists from localStorage on mount
   useEffect(() => {
-    const savedPlaylists = localStorage.getItem('musicflow-playlists');
-    if (savedPlaylists) {
-      try {
-        const parsedPlaylists = JSON.parse(savedPlaylists).map((playlist: any) => ({
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsedPlaylists = JSON.parse(saved).map((playlist: any) => ({
           ...playlist,
           createdAt: new Date(playlist.createdAt),
           updatedAt: new Date(playlist.updatedAt),
         }));
         setPlaylists(parsedPlaylists);
-      } catch (error) {
-        console.error('Error loading playlists:', error);
+      } else {
+        // Create default "Preferiti" playlist if none exist
+        const defaultPlaylist: Playlist = {
+          id: 'favorites',
+          name: 'I tuoi preferiti',
+          description: 'Le tue canzoni più amate',
+          tracks: [],
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
+        setPlaylists([defaultPlaylist]);
       }
+    } catch (error) {
+      console.error('Error loading playlists:', error);
+      // Create default playlist on error
+      const defaultPlaylist: Playlist = {
+        id: 'favorites',
+        name: 'I tuoi preferiti',
+        description: 'Le tue canzoni più amate',
+        tracks: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      setPlaylists([defaultPlaylist]);
     }
   }, []);
 
   // Save playlists to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem('musicflow-playlists', JSON.stringify(playlists));
+    if (playlists.length > 0) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(playlists));
+      } catch (error) {
+        console.error('Error saving playlists:', error);
+      }
+    }
   }, [playlists]);
 
-  const createPlaylist = (name: string, description?: string): Playlist => {
+  const createPlaylist = (name: string, description = ''): Playlist => {
     const newPlaylist: Playlist = {
-      id: `playlist-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `playlist_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       name,
       description,
       tracks: [],
@@ -66,15 +96,9 @@ export function PlaylistProvider({ children }: PlaylistProviderProps) {
       updatedAt: new Date(),
     };
 
-    setPlaylists(prev => [...prev, newPlaylist]);
+    // Add new playlist at the very beginning, even above favorites
+    setPlaylists(prev => [newPlaylist, ...prev]);
     return newPlaylist;
-  };
-
-  const deletePlaylist = (playlistId: string) => {
-    setPlaylists(prev => prev.filter(playlist => playlist.id !== playlistId));
-    if (currentPlaylist?.id === playlistId) {
-      setCurrentPlaylist(null);
-    }
   };
 
   const addTrackToPlaylist = (playlistId: string, track: Track) => {
@@ -82,15 +106,16 @@ export function PlaylistProvider({ children }: PlaylistProviderProps) {
       if (playlist.id === playlistId) {
         // Check if track already exists
         const trackExists = playlist.tracks.some(t => t.id === track.id);
-        if (trackExists) return playlist;
-
-        const updatedPlaylist = {
+        if (trackExists) {
+          return playlist; // Don't add duplicate
+        }
+        
+        // Add new tracks at the beginning (inverted order)
+        return {
           ...playlist,
-          tracks: [...playlist.tracks, track],
+          tracks: [track, ...playlist.tracks],
           updatedAt: new Date(),
-          thumbnail: playlist.tracks.length === 0 ? track.thumbnail : playlist.thumbnail,
         };
-        return updatedPlaylist;
       }
       return playlist;
     }));
@@ -99,19 +124,24 @@ export function PlaylistProvider({ children }: PlaylistProviderProps) {
   const removeTrackFromPlaylist = (playlistId: string, trackId: string) => {
     setPlaylists(prev => prev.map(playlist => {
       if (playlist.id === playlistId) {
-        const updatedTracks = playlist.tracks.filter(track => track.id !== trackId);
         return {
           ...playlist,
-          tracks: updatedTracks,
+          tracks: playlist.tracks.filter(track => track.id !== trackId),
           updatedAt: new Date(),
-          thumbnail: updatedTracks.length > 0 ? updatedTracks[0].thumbnail : undefined,
         };
       }
       return playlist;
     }));
   };
 
-  const updatePlaylist = (playlistId: string, updates: Partial<Playlist>) => {
+  const deletePlaylist = (playlistId: string) => {
+    // Don't allow deleting the favorites playlist
+    if (playlistId === 'favorites') return;
+    
+    setPlaylists(prev => prev.filter(playlist => playlist.id !== playlistId));
+  };
+
+  const updatePlaylist = (playlistId: string, updates: Partial<Omit<Playlist, 'id' | 'createdAt'>>) => {
     setPlaylists(prev => prev.map(playlist => {
       if (playlist.id === playlistId) {
         return {
@@ -124,43 +154,42 @@ export function PlaylistProvider({ children }: PlaylistProviderProps) {
     }));
   };
 
-  const getPlaylistById = (playlistId: string): Playlist | undefined => {
-    return playlists.find(playlist => playlist.id === playlistId);
-  };
-
-  const duplicatePlaylist = (playlistId: string, newName?: string): Playlist | null => {
-    const original = getPlaylistById(playlistId);
-    if (!original) return null;
-
-    const duplicated = createPlaylist(
-      newName || `${original.name} (Copy)`,
-      original.description
-    );
-
-    // Add all tracks from original playlist
-    original.tracks.forEach(track => {
-      addTrackToPlaylist(duplicated.id, track);
-    });
-
-    return duplicated;
-  };
-
-  const value: PlaylistContextType = {
-    playlists,
-    currentPlaylist,
-    createPlaylist,
-    deletePlaylist,
-    addTrackToPlaylist,
-    removeTrackFromPlaylist,
-    updatePlaylist,
-    setCurrentPlaylist,
-    getPlaylistById,
-    duplicatePlaylist,
+  const reorderTrack = (playlistId: string, fromIndex: number, toIndex: number) => {
+    setPlaylists(prev => prev.map(playlist => {
+      if (playlist.id === playlistId) {
+        const newTracks = [...playlist.tracks];
+        const [movedTrack] = newTracks.splice(fromIndex, 1);
+        newTracks.splice(toIndex, 0, movedTrack);
+        
+        return {
+          ...playlist,
+          tracks: newTracks,
+          updatedAt: new Date(),
+        };
+      }
+      return playlist;
+    }));
   };
 
   return (
-    <PlaylistContext.Provider value={value}>
+    <PlaylistContext.Provider value={{
+      playlists,
+      createPlaylist,
+      addTrackToPlaylist,
+      removeTrackFromPlaylist,
+      deletePlaylist,
+      updatePlaylist,
+      reorderTrack,
+    }}>
       {children}
     </PlaylistContext.Provider>
   );
+}
+
+export function usePlaylist() {
+  const context = useContext(PlaylistContext);
+  if (context === undefined) {
+    throw new Error('usePlaylist must be used within a PlaylistProvider');
+  }
+  return context;
 }

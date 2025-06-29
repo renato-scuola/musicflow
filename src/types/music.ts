@@ -6,6 +6,7 @@ export interface Track {
   thumbnail: string;
   videoId: string;
   channelTitle: string;
+  url?: string;
 }
 
 export interface YouTubeSearchResult {
@@ -33,26 +34,12 @@ export interface YouTubeSearchResult {
 export interface PlayerState {
   currentTrack: Track | null;
   isPlaying: boolean;
+  isLoading: boolean;
+  isBuffering: boolean;
   currentTime: number;
   duration: number;
   volume: number;
-  isShuffled: boolean;
   isRepeating: boolean;
   playlist: Track[];
   currentIndex: number;
-}
-
-export interface Playlist {
-  id: string;
-  name: string;
-  description?: string;
-  tracks: Track[];
-  createdAt: Date;
-  updatedAt: Date;
-  thumbnail?: string; // Use first track's thumbnail or custom
-}
-
-export interface PlaylistState {
-  playlists: Playlist[];
-  currentPlaylist: Playlist | null;
 }

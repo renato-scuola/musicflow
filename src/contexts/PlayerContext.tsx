@@ -13,20 +13,25 @@ type PlayerAction =
   | { type: 'SET_VOLUME'; payload: number }
   | { type: 'SET_TIME'; payload: number }
   | { type: 'SET_DURATION'; payload: number }
-  | { type: 'TOGGLE_SHUFFLE' }
-  | { type: 'TOGGLE_REPEAT' };
+  | { type: 'TOGGLE_REPEAT' }
+  | { type: 'TRACK_ENDED' }
+  | { type: 'SET_LOADING'; payload: boolean }
+  | { type: 'SET_BUFFERING'; payload: boolean };
 
 const initialState: PlayerState = {
   currentTrack: null,
   isPlaying: false,
+  isLoading: false,
+  isBuffering: false,
   currentTime: 0,
   duration: 0,
   volume: 1,
-  isShuffled: false,
   isRepeating: false,
   playlist: [],
   currentIndex: -1,
 };
+
+// Helper function removed - no more shuffle
 
 function playerReducer(state: PlayerState, action: PlayerAction): PlayerState {
   switch (action.type) {
@@ -37,14 +42,19 @@ function playerReducer(state: PlayerState, action: PlayerAction): PlayerState {
           currentTrack: null,
           currentIndex: -1,
           currentTime: 0,
+          isLoading: false,
+          isBuffering: false,
         };
       }
       const trackIndex = state.playlist.findIndex(track => track.id === action.payload!.id);
+      
       return {
         ...state,
         currentTrack: action.payload,
         currentIndex: trackIndex >= 0 ? trackIndex : state.currentIndex,
         currentTime: 0,
+        isLoading: true,
+        isBuffering: false,
       };
 
     case 'SET_PLAYLIST':
@@ -61,28 +71,38 @@ function playerReducer(state: PlayerState, action: PlayerAction): PlayerState {
 
     case 'NEXT':
       if (state.playlist.length === 0) return state;
-      let nextIndex = state.currentIndex + 1;
-      if (nextIndex >= state.playlist.length) {
-        nextIndex = state.isRepeating ? 0 : state.currentIndex;
+      
+      let nextTrackIndex = state.currentIndex + 1;
+      if (nextTrackIndex >= state.playlist.length) {
+        // End of playlist - always loop back to start
+        nextTrackIndex = 0;
       }
+      
       return {
         ...state,
-        currentTrack: state.playlist[nextIndex],
-        currentIndex: nextIndex,
+        currentTrack: state.playlist[nextTrackIndex],
+        currentIndex: nextTrackIndex,
         currentTime: 0,
+        isLoading: true,
+        isBuffering: false,
       };
 
     case 'PREVIOUS':
       if (state.playlist.length === 0) return state;
-      let prevIndex = state.currentIndex - 1;
-      if (prevIndex < 0) {
-        prevIndex = state.isRepeating ? state.playlist.length - 1 : 0;
+      
+      let prevTrackIndex = state.currentIndex - 1;
+      if (prevTrackIndex < 0) {
+        // Start of playlist - always loop to end
+        prevTrackIndex = state.playlist.length - 1;
       }
+      
       return {
         ...state,
-        currentTrack: state.playlist[prevIndex],
-        currentIndex: prevIndex,
+        currentTrack: state.playlist[prevTrackIndex],
+        currentIndex: prevTrackIndex,
         currentTime: 0,
+        isLoading: true,
+        isBuffering: false,
       };
 
     case 'SET_VOLUME':
@@ -94,11 +114,33 @@ function playerReducer(state: PlayerState, action: PlayerAction): PlayerState {
     case 'SET_DURATION':
       return { ...state, duration: action.payload };
 
-    case 'TOGGLE_SHUFFLE':
-      return { ...state, isShuffled: !state.isShuffled };
-
     case 'TOGGLE_REPEAT':
       return { ...state, isRepeating: !state.isRepeating };
+
+    case 'SET_LOADING':
+      return { ...state, isLoading: action.payload };
+
+    case 'SET_BUFFERING':
+      return { ...state, isBuffering: action.payload };
+
+    case 'TRACK_ENDED':
+      if (state.playlist.length === 0) return state;
+      
+      // Go to next track in playlist (always loop)
+      let nextAutoIndex = state.currentIndex + 1;
+      if (nextAutoIndex >= state.playlist.length) {
+        nextAutoIndex = 0; // Loop back to start
+      }
+      
+      return {
+        ...state,
+        currentTrack: state.playlist[nextAutoIndex],
+        currentIndex: nextAutoIndex,
+        currentTime: 0,
+        isPlaying: true,
+        isLoading: true,
+        isBuffering: false,
+      };
 
     default:
       return state;
@@ -115,8 +157,8 @@ const PlayerContext = createContext<{
   setVolume: (volume: number) => void;
   setCurrentTime: (time: number) => void;
   setDuration: (duration: number) => void;
-  toggleShuffle: () => void;
   toggleRepeat: () => void;
+  trackEnded: () => void;
 } | null>(null);
 
 export function PlayerProvider({ children }: { children: React.ReactNode }) {
@@ -154,13 +196,19 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     dispatch({ type: 'SET_DURATION', payload: duration });
   }, []);
 
-  const toggleShuffle = useCallback(() => {
-    dispatch({ type: 'TOGGLE_SHUFFLE' });
-  }, []);
-
   const toggleRepeat = useCallback(() => {
+    console.log('Toggling repeat from', state.isRepeating, 'to', !state.isRepeating);
     dispatch({ type: 'TOGGLE_REPEAT' });
-  }, []);
+  }, [state.isRepeating]);
+
+  const trackEnded = useCallback(() => {
+    console.log('Track ended. Current state:', {
+      currentIndex: state.currentIndex,
+      playlistLength: state.playlist.length,
+      isRepeating: state.isRepeating,
+    });
+    dispatch({ type: 'TRACK_ENDED' });
+  }, [state]);
 
   return (
     <PlayerContext.Provider
@@ -174,8 +222,8 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
         setVolume,
         setCurrentTime,
         setDuration,
-        toggleShuffle,
         toggleRepeat,
+        trackEnded,
       }}
     >
       {children}

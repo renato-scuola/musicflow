@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { Search, X, Loader2 } from 'lucide-react';
+import { Search, X, Loader2, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { invidiousAPI } from '@/services/invidious';
 import { Track } from '@/types/music';
 import { usePlayer } from '@/contexts/PlayerContext';
+import { AddToPlaylistModal } from './AddToPlaylistModal';
 
 interface SearchBarProps {
   className?: string;
@@ -21,6 +22,8 @@ export function SearchBar({ className, onSearchStateChange, isCompact = false }:
   const [isOpen, setIsOpen] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
+  const [showPlaylistModal, setShowPlaylistModal] = useState(false);
+  const [selectedTrackForPlaylist, setSelectedTrackForPlaylist] = useState<Track | null>(null);
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const lastQueryRef = useRef('');
@@ -110,13 +113,21 @@ export function SearchBar({ className, onSearchStateChange, isCompact = false }:
     }
   };
 
+  const handleAddToPlaylist = (track: Track, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent track selection
+    setSelectedTrackForPlaylist(track);
+    setShowPlaylistModal(true);
+  };
+
   const clearSearch = () => {
     setQuery('');
     setResults([]);
     setIsOpen(false);
     inputRef.current?.blur();
-    // Don't reset search state when clearing text anymore
-    // State remains persistent until player opens
+    // Notify parent that search has been cleared
+    if (onSearchStateChange) {
+      onSearchStateChange(false);
+    }
   };
 
   return (
@@ -359,9 +370,22 @@ export function SearchBar({ className, onSearchStateChange, isCompact = false }:
                       </p>
                     </div>
                     
-                    {/* Hover indicator */}
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="w-2 h-2 bg-white/60 rounded-full" />
+                    {/* Add to Playlist Button */}
+                    <div className="flex items-center space-x-2">
+                      <motion.button
+                        onClick={(e) => handleAddToPlaylist(track, e)}
+                        className="opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 w-8 h-8 bg-white/10 hover:bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center border border-white/10 hover:border-white/20"
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                        title="Aggiungi alla playlist"
+                      >
+                        <Plus className="w-4 h-4 text-white/70 hover:text-white transition-colors" />
+                      </motion.button>
+                      
+                      {/* Play indicator */}
+                      <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="w-2 h-2 bg-white/60 rounded-full" />
+                      </div>
                     </div>
                   </motion.button>
                 ))}
@@ -380,6 +404,23 @@ export function SearchBar({ className, onSearchStateChange, isCompact = false }:
         </motion.div>
       )}
       </AnimatePresence>
+      
+      {/* Add to Playlist Modal */}
+      <AddToPlaylistModal
+        isOpen={showPlaylistModal}
+        onClose={() => {
+          setShowPlaylistModal(false);
+          setSelectedTrackForPlaylist(null);
+        }}
+        track={selectedTrackForPlaylist ? {
+          id: selectedTrackForPlaylist.id,
+          title: selectedTrackForPlaylist.title,
+          artist: selectedTrackForPlaylist.artist,
+          duration: selectedTrackForPlaylist.duration,
+          thumbnail: selectedTrackForPlaylist.thumbnail,
+          url: selectedTrackForPlaylist.url
+        } : null}
+      />
     </div>
   );
 }
