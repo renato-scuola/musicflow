@@ -53,7 +53,7 @@ export function PlaylistProvider({ children }: { children: ReactNode }) {
         const defaultPlaylist: Playlist = {
           id: 'favorites',
           name: 'I tuoi preferiti',
-          description: 'Le tue canzoni più amate',
+          description: 'Your most loved songs',
           tracks: [],
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -66,7 +66,7 @@ export function PlaylistProvider({ children }: { children: ReactNode }) {
       const defaultPlaylist: Playlist = {
         id: 'favorites',
         name: 'I tuoi preferiti',
-        description: 'Le tue canzoni più amate',
+        description: 'Your most loved songs',
         tracks: [],
         createdAt: new Date(),
         updatedAt: new Date(),

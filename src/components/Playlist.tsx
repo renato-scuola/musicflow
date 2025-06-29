@@ -205,7 +205,7 @@ export function Playlist() {
             className="flex items-center space-x-2 px-6 py-3 bg-white/15 hover:bg-white/25 backdrop-blur-xl text-white rounded-2xl font-outfit font-medium transition-all duration-300 border border-white/30 shadow-lg"
           >
             <Plus className="w-5 h-5" />
-            <span>Nuova Playlist</span>
+            <span>New Playlist</span>
           </button>
         </motion.div>
 
@@ -221,7 +221,7 @@ export function Playlist() {
               <Music className="w-10 h-10 text-white/50" />
             </div>
             <h3 className="text-xl font-outfit font-semibold text-white mb-2">
-              Nessuna playlist ancora
+              No playlists yet
             </h3>
             <p className="text-white/70 font-outfit mb-6">
               Crea la tua prima playlist per iniziare a organizzare la tua musica
@@ -262,10 +262,10 @@ export function Playlist() {
                           {playlist.name}
                         </h3>
                         <p className="text-white/70 text-sm font-outfit mb-1">
-                          {playlist.description || 'Nessuna descrizione'}
+                          {playlist.description || 'No description'}
                         </p>
                         <p className="text-white/50 text-xs font-outfit">
-                          {playlist.tracks.length} brani
+                          {playlist.tracks.length} tracks
                         </p>
                       </div>
                     </div>
@@ -627,7 +627,7 @@ export function Playlist() {
                         transition={{ delay: 0.8, duration: 0.4 }}
                         className="w-full mt-4 py-3 text-white/70 hover:text-white font-outfit text-sm transition-all duration-300 border border-white/20 hover:border-white/40 rounded-2xl hover:bg-white/10 backdrop-blur-xl"
                       >
-                        Mostra tutti i {playlist.tracks.length} brani
+                        Show all {playlist.tracks.length} tracks
                       </motion.button>
                     )}
                   </div>
@@ -662,23 +662,23 @@ export function Playlist() {
                 }}
               >
               <h3 className="text-xl font-outfit font-semibold text-white mb-4">
-                Conferma eliminazione
+                Confirm deletion
               </h3>
               <p className="text-white/70 font-outfit mb-6">
-                Sei sicuro di voler eliminare questa playlist? Questa azione non può essere annullata.
+                Are you sure you want to delete this playlist? This action cannot be undone.
               </p>
               <div className="flex space-x-3">
                 <button
                   onClick={() => setDeleteConfirm(null)}
                   className="flex-1 py-3 px-4 bg-white/10 hover:bg-white/20 backdrop-blur-xl text-white/80 hover:text-white rounded-2xl font-outfit font-medium transition-all duration-300 border border-white/20"
                 >
-                  Annulla
+                  Cancel
                 </button>
                 <button
                   onClick={confirmDelete}
                   className="flex-1 py-3 px-4 bg-red-500/30 hover:bg-red-500/50 backdrop-blur-xl text-white rounded-2xl font-outfit font-medium transition-all duration-300 border border-red-500/30"
                 >
-                  Elimina
+                  Delete
                 </button>
               </div>
             </motion.div>

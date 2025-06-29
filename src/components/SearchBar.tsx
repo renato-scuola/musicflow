@@ -377,7 +377,7 @@ export function SearchBar({ className, onSearchStateChange, isCompact = false }:
                         className="opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-all duration-300 w-8 h-8 bg-white/10 hover:bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center border border-white/10 hover:border-white/20"
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.95 }}
-                        title="Aggiungi alla playlist"
+                        title="Add to playlist"
                       >
                         <Plus className="w-4 h-4 text-white/70 hover:text-white transition-colors" />
                       </motion.button>

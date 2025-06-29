@@ -34,7 +34,7 @@ class InvidiousAPIService {
       try {
         const instance = this.getCurrentInstance();
         
-        // Skip se già testata questa istanza in questo giro
+        // Skip if this instance was already tested in this round
         if (this.testedInstances.has(instance)) {
           await this.rotateInstance();
           continue;
@@ -197,7 +197,7 @@ class InvidiousAPIService {
 
   private getBestThumbnail(thumbnails: any[]): string {
     if (!thumbnails || !Array.isArray(thumbnails) || thumbnails.length === 0) {
-      return '/placeholder-album.svg'; // Fallback al nostro placeholder
+      return '/placeholder-album.svg'; // Fallback to our placeholder
     }
 
     // Ordina per qualità (preferisce alta risoluzione)

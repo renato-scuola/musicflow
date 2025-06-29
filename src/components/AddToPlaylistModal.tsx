@@ -123,7 +123,7 @@ export function AddToPlaylistModal({ isOpen, onClose, track }: AddToPlaylistModa
                     className="w-full p-3 bg-white/15 hover:bg-white/25 backdrop-blur-xl border border-white/30 rounded-2xl flex items-center space-x-3 transition-all duration-300"
                   >
                     <Plus className="w-5 h-5 text-white" />
-                    <span className="text-white font-outfit font-medium">Crea nuova playlist</span>
+                    <span className="text-white font-outfit font-medium">Create new playlist</span>
                   </button>
                 ) : (
                   <div className="p-3 bg-white/10 border border-white/20 rounded-xl">
@@ -131,7 +131,7 @@ export function AddToPlaylistModal({ isOpen, onClose, track }: AddToPlaylistModa
                       type="text"
                       value={newPlaylistName}
                       onChange={(e) => setNewPlaylistName(e.target.value)}
-                      placeholder="Nome della nuova playlist"
+                      placeholder="New playlist name"
                       className="w-full bg-transparent text-white placeholder-white/40 font-outfit focus:outline-none mb-3"
                       autoFocus
                       maxLength={50}
@@ -141,14 +141,14 @@ export function AddToPlaylistModal({ isOpen, onClose, track }: AddToPlaylistModa
                         onClick={() => setShowCreateNew(false)}
                         className="flex-1 py-2 px-3 bg-white/10 hover:bg-white/20 text-white/80 rounded-lg font-outfit text-sm transition-colors duration-200"
                       >
-                        Annulla
+                        Cance
                       </button>
                       <button
                         onClick={handleCreateAndAdd}
                         disabled={!newPlaylistName.trim()}
                         className="flex-1 py-2 px-3 bg-white/20 hover:bg-white/30 backdrop-blur-xl text-white rounded-xl font-outfit text-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed border border-white/30"
                       >
-                        Crea e aggiungi
+                        Create & Add
                       </button>
                     </div>
                   </div>
@@ -158,7 +158,7 @@ export function AddToPlaylistModal({ isOpen, onClose, track }: AddToPlaylistModa
               {/* Existing Playlists */}
               <div className="space-y-2">
                 <h3 className="text-white/80 font-outfit text-sm font-medium mb-2">
-                  Le tue playlist
+                  Your playlists
                 </h3>
                 {playlists.map((playlist) => {
                   const isAdded = addedToPlaylists.has(playlist.id);
@@ -188,7 +188,7 @@ export function AddToPlaylistModal({ isOpen, onClose, track }: AddToPlaylistModa
                             {playlist.name}
                           </p>
                           <p className="text-white/60 font-outfit text-xs">
-                            {playlist.tracks.length} brani
+                            {playlist.tracks.length} tracks
                           </p>
                         </div>
                       </div>
@@ -205,7 +205,7 @@ export function AddToPlaylistModal({ isOpen, onClose, track }: AddToPlaylistModa
                         )}
                         {isInPlaylist && (
                           <div className="text-white/40 font-outfit text-xs">
-                            Già aggiunto
+                            Already added
                           </div>
                         )}
                         {!isInPlaylist && !isAdded && (
