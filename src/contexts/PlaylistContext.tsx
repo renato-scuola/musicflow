@@ -52,7 +52,7 @@ export function PlaylistProvider({ children }: { children: ReactNode }) {
         // Create default "Preferiti" playlist if none exist
         const defaultPlaylist: Playlist = {
           id: 'favorites',
-          name: 'I tuoi preferiti',
+          name: 'Favorites',
           description: 'Your most loved songs',
           tracks: [],
           createdAt: new Date(),
@@ -65,7 +65,7 @@ export function PlaylistProvider({ children }: { children: ReactNode }) {
       // Create default playlist on error
       const defaultPlaylist: Playlist = {
         id: 'favorites',
-        name: 'I tuoi preferiti',
+        name: 'Favorites',
         description: 'Your most loved songs',
         tracks: [],
         createdAt: new Date(),

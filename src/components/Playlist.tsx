@@ -194,7 +194,7 @@ export function Playlist() {
         >
           <div>
             <h1 className="text-3xl md:text-4xl font-outfit font-bold text-white mb-2">
-              Le tue Playlist
+              Your Playlists
             </h1>
             <p className="text-white/60 font-outfit">
               Manage your personal music collection
@@ -273,7 +273,7 @@ export function Playlist() {
                       <button
                         onClick={() => togglePlaylistExpanded(playlist.id)}
                         className="w-10 h-10 bg-white/15 hover:bg-white/25 backdrop-blur-xl rounded-full flex items-center justify-center transition-all duration-300 border border-white/30 text-white/70 hover:text-white"
-                        title={isExpanded ? "Compatta playlist" : "Espandi playlist"}
+                        title={isExpanded ? "Collapse playlist" : "Expand playlist"}
                       >
                         <motion.div
                           animate={{ rotate: isExpanded ? 180 : 0 }}
@@ -542,7 +542,7 @@ export function Playlist() {
                                 onTouchEnd={handleTouchEnd}
                                 onClick={(e) => e.stopPropagation()}
                                 className="w-8 h-8 bg-white/15 hover:bg-white/25 backdrop-blur-xl rounded-full flex items-center justify-center transition-all duration-300 border border-white/30 cursor-grab active:cursor-grabbing select-none hover:scale-110 hover:shadow-lg hover:shadow-white/15"
-                                title="Trascina per riordinare"
+                                title="Drag to reorder"
                                 style={{ touchAction: 'none' }}
                               >
                                 <GripVertical className="w-3 h-3 text-white/70" />
