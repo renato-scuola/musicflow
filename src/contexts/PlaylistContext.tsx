@@ -18,6 +18,8 @@ export interface Playlist {
   tracks: Track[];
   createdAt: Date;
   updatedAt: Date;
+  sourceUrl?: string; // URL for imported playlists
+  autoSync?: boolean; // Auto-sync setting for imported playlists
 }
 
 interface PlaylistContextType {
